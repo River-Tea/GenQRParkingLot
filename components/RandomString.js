@@ -1,5 +1,5 @@
 const RandomString = () => {
-    let length = 50; 
+    let length = 40; 
     let randStr = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;

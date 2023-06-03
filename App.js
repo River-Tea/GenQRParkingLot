@@ -1,10 +1,9 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import RandomString from './components/RandomString';
 import ParkingCar from './screens/ParkingCar';
 import { NavigationContainer } from '@react-navigation/native';
 import ShowQR from './screens/ShowQR';
-import { Component, useEffect } from 'react';
 import PickUpCar from './screens/PickUpCar';
 
 
@@ -19,23 +18,17 @@ export default function App() {
             <Stack.Navigator>
                 <Stack.Screen
                     name='ParkingCar'
-                    component={Parking} />
+                    component={Parking}
+                    options={{ headerShown: false }} />
                 <Stack.Screen
                     name='PickUpCar'
-                    component={PickUpCar} />
+                    component={PickUpCar}
+                    options={{ headerShown: false }} />
                 <Stack.Screen
                     name='ShowQR'
-                    component={ShowQR} />
+                    component={ShowQR}
+                    options={{ headerShown: false }} />
             </Stack.Navigator>
         </NavigationContainer>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
