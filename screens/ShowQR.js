@@ -2,7 +2,6 @@ import { StyleSheet, View, Text, BackHandler, DevSettings } from 'react-native'
 import React, { useEffect } from 'react'
 import QRCode from 'react-native-qrcode-svg'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { Navigation } from 'react-native-navigation'
 
 
 const ShowQR = () => {
