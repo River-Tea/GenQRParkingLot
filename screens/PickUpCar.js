@@ -1,11 +1,42 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native';
 
 const PickUpCar = () => {
     const navigator = useNavigation();
     const route = useRoute();
-    const { randomString } = route.params;
+    const { randomString, position, timeIn } = route.params;
+    const [timeDiff, setTimeDiff] = useState('');
+
+    // console.log("pickup", position, "----", timeIn);
+
+    useEffect(() => {
+
+        function calTimeDiff() {
+            const date = new Date(timeIn * 1000);
+            const currentTime = new Date();
+
+            const timeDiffInMil = currentTime.getTime() - date.getTime();
+            setTimeDiff(formatTime(timeDiffInMil));
+        }
+
+        function formatTime(milliseconds) {
+            const seconds = Math.floor((milliseconds / 1000) % 60);
+            const minutes = Math.floor((milliseconds / (1000 * 60)) % 60);
+            const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
+            const days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
+
+            const formattedDays = days < 10 ? `0${days}` : days;
+            const formattedHours = hours < 10 ? `0${hours}` : hours;
+            const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+            const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+
+            return `${formattedDays} days ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+        }
+        setInterval(() => {
+            calTimeDiff();
+        }, 1000);
+    })
 
     const generateQRCodeData = () => {
         updatedQRCodeData = 'o' + randomString;
@@ -15,19 +46,19 @@ const PickUpCar = () => {
         });
     }
 
-    const serial = 'A1-23'
-    const time = '04:15:56'
+    // const locate = position
+    // const time = timeDiff
     return (
         <View style={styles.container}>
             <Image
                 style={styles.appThumb}
                 source={require('../assets/parking-locate.png')} />
             <View style={styles.info}>
-                <Text style={styles.infoTitle}>Parking Location:
-                    <Text style={styles.textInfo}> {serial}</Text>
+                <Text style={styles.infoTitle}>Location:
+                    <Text style={styles.textInfo}> {position}</Text>
                 </Text>
-                <Text style={styles.infoTitle}>Parking Duration:
-                    <Text style={styles.textInfo}> {time}</Text>
+                <Text style={styles.infoTitle}>Duration:
+                    <Text style={styles.textInfo}> {timeDiff}</Text>
                 </Text>
             </View>
             <View>
@@ -60,7 +91,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#7B5E5C',
         borderRadius: 15,
-        backgroundColor: '#F5E8C7', 
+        backgroundColor: '#F5E8C7',
         // EEC8B185
     },
     infoTitle: {

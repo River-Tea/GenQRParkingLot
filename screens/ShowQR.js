@@ -1,33 +1,44 @@
 import { StyleSheet, View, Text, BackHandler, DevSettings } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import QRCode from 'react-native-qrcode-svg'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import Firebase from '../components/Firebase'
 
 
 const ShowQR = () => {
     const route = useRoute();
     const { qrCodeData, randomString } = route.params;
-    // const paramsString = JSON.stringify(qrCodeData);
-    // console.log('QR', paramsString);
-    console.log('QR Code', qrCodeData);
-    console.log('QR Code Type', typeof (qrCodeData));
-    console.log('Ori String', randomString);
+    let position, timeIn;
 
-    const navigators = useNavigation();
-
-    let logoFromFile = require('../assets/parking.png');
-
+    const queryTrans = Firebase.firebase.firestore().collection("xe").where("qr", "==", "sdfadfasdf"); // randomString
     useEffect(() => {
-        // contiPage(qrCodeData);
+        queryTrans.get().then((snapshot) => {
+            // Xử lý dữ liệu trả về
+            snapshot.forEach((snap) => {
+                const data = snap.data();
+                position = data.position;
+                timeIn = data.time_in;
+                // console.log("ori", position, "----", timeIn);
+            });
+        });
+
         setTimeout(() => {
             contiPage(qrCodeData)
         }, 2000);
     })
 
+    const navigators = useNavigation();
+
+    let logoFromFile = require('../assets/parking.png');
+
     const contiPage = (qrCodeData) => {
         switch (qrCodeData.charAt(0)) {
             case 'i':
-                navigators.navigate('PickUpCar', { randomString: randomString });
+                navigators.navigate('PickUpCar', {
+                    randomString: randomString,
+                    position: position,
+                    timeIn: timeIn,
+                });
                 break;
             default:
                 DevSettings.reload();

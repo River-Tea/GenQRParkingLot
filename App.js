@@ -5,12 +5,23 @@ import ParkingCar from './screens/ParkingCar';
 import { NavigationContainer } from '@react-navigation/native';
 import ShowQR from './screens/ShowQR';
 import PickUpCar from './screens/PickUpCar';
+import { useEffect, useState } from 'react';
+import Firebase from './components/Firebase';
 
 
 const Stack = createStackNavigator();
 export default function App() {
-    const randStr = RandomString();
-    // console.log('start', randStr);
+    const [ randStr, setRandStr ] = useState(RandomString());
+    const queryTrans = Firebase.firebase.firestore().collection("xe").orderBy("time_in").limit(1);
+    useEffect(() => {
+        setInterval(() => {
+            queryTrans.get().then((snapshot) => {
+                if(snapshot.empty) {
+                    setRandStr(RandomString());
+                }
+            }) 
+        }, 5000);
+    })
     const Parking = () => <ParkingCar randomString={randStr} />
 
     return (
