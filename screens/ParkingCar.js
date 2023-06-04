@@ -4,14 +4,15 @@ import { useNavigation } from '@react-navigation/native';
 
 const ParkingCar = ({ randomString, parkingID }) => {
     const navigator = useNavigation();
-    console.log(parkingID);
+    console.log('park', parkingID);
 
     const generateQRCodeData = () => {
         const updatedQRCodeData = 'i' + randomString;
         navigator.navigate('ShowQR', {
             qrCodeData: updatedQRCodeData,
             randomString: randomString,
-            parkingID: parkingID
+            parkingID: parkingID,
+            st: true,
         });
     };
 

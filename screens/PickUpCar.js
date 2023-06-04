@@ -44,6 +44,7 @@ const PickUpCar = () => {
             qrCodeData: updatedQRCodeData,
             randomString: randomString, 
             parkingID: parkingID,
+            st: false,
         });
     }
 

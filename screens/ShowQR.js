@@ -7,8 +7,8 @@ import Firebase from '../components/Firebase'
 
 const ShowQR = () => {
     const route = useRoute();
-    const { qrCodeData, randomString, parkingID } = route.params;
-    console.log(parkingID);
+    const { qrCodeData, randomString, parkingID, st } = route.params;
+    console.log('show', qrCodeData);
     let position, timeIn, state;
 
     const queryTrans = Firebase.firebase.firestore().collection("xe").doc(parkingID);
@@ -32,11 +32,12 @@ const ShowQR = () => {
                     parkingID: parkingID,
                 });
             }
-            else if (qrCode.charAt(0) === 'o' && status == false) {
+            else if (qrCode.charAt(0) === 'o' && status == true) {
                 DevSettings.reload();
             }
         }
-    }, [qrCodeData, state])
+        console.log(state);
+    }, [st])
 
     const navigators = useNavigation();
 
