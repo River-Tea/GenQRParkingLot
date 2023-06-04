@@ -11,18 +11,18 @@ import Firebase from './components/Firebase';
 
 const Stack = createStackNavigator();
 export default function App() {
-    const [ randStr, setRandStr ] = useState(RandomString());
-    const queryTrans = Firebase.firebase.firestore().collection("xe").orderBy("time_in").limit(1);
-    useEffect(() => {
-        setInterval(() => {
-            queryTrans.get().then((snapshot) => {
-                if(snapshot.empty) {
-                    setRandStr(RandomString());
-                }
-            }) 
-        }, 5000);
-    })
-    const Parking = () => <ParkingCar randomString={randStr} />
+    const [randStr, setRandStr] = useState(RandomString());
+    const [parkingID, setParkingID] = useState(null);
+    const queryTrans = Firebase.firebase.firestore().collection("xe").orderBy('time_in', 'desc').limit(1);
+
+    queryTrans.get().then((snapshot) => {
+        snapshot.forEach((doc) => {
+            const newestItemId = doc.id;
+            setParkingID(newestItemId);
+        });
+    });
+
+    let Parking = () => <ParkingCar randomString={randStr} parkingID={parkingID} />
 
     return (
         <NavigationContainer>

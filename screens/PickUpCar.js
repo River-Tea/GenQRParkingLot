@@ -5,7 +5,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 const PickUpCar = () => {
     const navigator = useNavigation();
     const route = useRoute();
-    const { randomString, position, timeIn } = route.params;
+    const { randomString, position, timeIn, parkingID } = route.params;
     const [timeDiff, setTimeDiff] = useState('');
 
     // console.log("pickup", position, "----", timeIn);
@@ -42,7 +42,8 @@ const PickUpCar = () => {
         updatedQRCodeData = 'o' + randomString;
         navigator.navigate('ShowQR', {
             qrCodeData: updatedQRCodeData,
-            randomString: randomString
+            randomString: randomString, 
+            parkingID: parkingID,
         });
     }
 

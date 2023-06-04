@@ -2,14 +2,16 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
 
-const ParkingCar = ({ randomString }) => {
+const ParkingCar = ({ randomString, parkingID }) => {
     const navigator = useNavigation();
+    console.log(parkingID);
 
     const generateQRCodeData = () => {
         const updatedQRCodeData = 'i' + randomString;
         navigator.navigate('ShowQR', {
             qrCodeData: updatedQRCodeData,
-            randomString: randomString
+            randomString: randomString,
+            parkingID: parkingID
         });
     };
 

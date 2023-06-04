@@ -7,21 +7,20 @@ import Firebase from '../components/Firebase'
 
 const ShowQR = () => {
     const route = useRoute();
-    const { qrCodeData, randomString } = route.params;
+    const { qrCodeData, randomString, parkingID } = route.params;
+    console.log(parkingID);
     let position, timeIn, state;
 
-    const queryTrans = Firebase.firebase.firestore().collection("xe").where("qr", "==", "sdfadfasdf"); // randomString
-    
+    const queryTrans = Firebase.firebase.firestore().collection("xe").doc(parkingID);
+
     useEffect(() => {
-        queryTrans.get().then((snapshot) => {
+        queryTrans.get().then((snap) => {
             // Xử lý dữ liệu trả về
-            snapshot.forEach((snap) => {
-                const data = snap.data();
-                position = data.position;
-                timeIn = data.time_in
-                state = data.status;
-                pageNavigate(qrCodeData, state);
-            });
+            const data = snap.data();
+            position = data.position;
+            timeIn = data.time_in;
+            state = data.status;
+            pageNavigate(qrCodeData, state);
         });
 
         const pageNavigate = (qrCode, status) => {
@@ -30,9 +29,10 @@ const ShowQR = () => {
                     randomString: randomString,
                     position: position,
                     timeIn: timeIn,
+                    parkingID: parkingID,
                 });
             }
-            else if (qrCode.charAt(0) === 'o' && status === false) {
+            else if (qrCode.charAt(0) === 'o' && status == false) {
                 DevSettings.reload();
             }
         }
