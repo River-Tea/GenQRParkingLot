@@ -8,43 +8,39 @@ import Firebase from '../components/Firebase'
 const ShowQR = () => {
     const route = useRoute();
     const { qrCodeData, randomString } = route.params;
-    let position, timeIn;
+    let position, timeIn, state;
 
     const queryTrans = Firebase.firebase.firestore().collection("xe").where("qr", "==", "sdfadfasdf"); // randomString
+    
     useEffect(() => {
         queryTrans.get().then((snapshot) => {
             // Xử lý dữ liệu trả về
             snapshot.forEach((snap) => {
                 const data = snap.data();
                 position = data.position;
-                timeIn = data.time_in;
-                // console.log("ori", position, "----", timeIn);
+                timeIn = data.time_in
+                state = data.status;
+                pageNavigate(qrCodeData, state);
             });
         });
 
-        setTimeout(() => {
-            contiPage(qrCodeData)
-        }, 2000);
-    })
-
-    const navigators = useNavigation();
-
-    let logoFromFile = require('../assets/parking.png');
-
-    const contiPage = (qrCodeData) => {
-        switch (qrCodeData.charAt(0)) {
-            case 'i':
+        const pageNavigate = (qrCode, status) => {
+            if (qrCode.charAt(0) === 'i' && status === true) {
                 navigators.navigate('PickUpCar', {
                     randomString: randomString,
                     position: position,
                     timeIn: timeIn,
                 });
-                break;
-            default:
+            }
+            else if (qrCode.charAt(0) === 'o' && status === false) {
                 DevSettings.reload();
-                break;
+            }
         }
-    }
+    }, [qrCodeData, state])
+
+    const navigators = useNavigation();
+
+    let logoFromFile = require('../assets/parking.png');
 
     return (
         <View style={styles.container}>
